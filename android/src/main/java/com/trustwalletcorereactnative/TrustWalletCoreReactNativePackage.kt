@@ -8,7 +8,7 @@ import com.facebook.react.uimanager.ViewManager
 
 class TrustWalletCoreReactNativePackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return listOf(TrustWalletCoreReactNativeModule(reactContext))
+    return listOf(TrustWalletCoreCoin(reactContext), TrustWalletCoreMnemonic(reactContext))
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
