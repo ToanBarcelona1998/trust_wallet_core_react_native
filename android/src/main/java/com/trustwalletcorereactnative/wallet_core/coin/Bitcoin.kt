@@ -1,8 +1,10 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
-import com.trustwalletcorereactnative.util.Numeric
-import com.trustwalletcorereactnative.util.toLong
+import com.trustwalletcorereactnative.wallet_core.util.Numeric
+import com.trustwalletcorereactnative.wallet_core.util.toHex
+import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
+import com.trustwalletcorereactnative.wallet_core.util.toLong
 import wallet.core.java.AnySigner
 import wallet.core.jni.BitcoinAddress
 import wallet.core.jni.BitcoinScript
@@ -20,13 +22,7 @@ class Bitcoin : Coin(CoinType.BITCOIN, "m/44'/0'/0'/0/0") {
         return address.description()
     }
 
-
-    override fun signTransaction(
-        tx: Map<String, Any>,
-        mnemonic: String,
-        passphrase: String
-    ): ByteArray {
-
+    override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
         val utxos: List<Map<String, Any>> = tx["utxos"] as List<Map<String, Any>>
 
         val type = coinType!!;
@@ -37,7 +33,7 @@ class Bitcoin : Coin(CoinType.BITCOIN, "m/44'/0'/0'/0/0") {
             toAddress = tx["to"] as String
             changeAddress = tx["changeAddress"] as String
             byteFee = tx["fee"]!!.toLong()
-        }.addPrivateKey(ByteString.copyFrom(getRawPrivateKey(mnemonic,passphrase)))
+        }.addPrivateKey(ByteString.copyFrom(privateKey.toHexByteArray()))
 
         for (utx in utxos) {
             val txHash = Numeric.hexStringToByteArray(utx["txid"] as String)
@@ -47,7 +43,7 @@ class Bitcoin : Coin(CoinType.BITCOIN, "m/44'/0'/0'/0/0") {
                 .setIndex(utx["vout"] as Int)
                 .setSequence(Long.MAX_VALUE.toInt())
                 .build()
-            val txScript = Numeric.hexStringToByteArray(utx["script"] as String)
+            val txScript = (utx["script"] as String).toHexByteArray()
 
             val utxo = Bitcoin.UnspentTransaction.newBuilder()
                 .setAmount(utx["value"]!!.toLong())
@@ -59,6 +55,6 @@ class Bitcoin : Coin(CoinType.BITCOIN, "m/44'/0'/0'/0/0") {
 
         val output = AnySigner.sign(signingInput.build(), coinType, Bitcoin.SigningOutput.parser())
 
-        return output.encoded.toByteArray()
+        return output.encoded.toByteArray().toHex()
     }
 }

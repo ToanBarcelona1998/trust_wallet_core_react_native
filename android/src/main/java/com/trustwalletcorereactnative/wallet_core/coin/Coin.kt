@@ -1,6 +1,8 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
-import com.trustwalletcorereactnative.util.toHex
+import com.trustwalletcorereactnative.wallet_core.interfaces.ICoin
+import com.trustwalletcorereactnative.wallet_core.util.toHex
+import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
 import org.json.JSONObject
 import wallet.core.java.AnySigner
 import wallet.core.jni.CoinType
@@ -84,21 +86,26 @@ abstract class Coin(coinType: CoinType, derivationPath: String) : ICoin {
     override fun sign(
         mnemonic: String,
         passphrase: String,
-        message: ByteArray
-    ): ByteArray {
+        message: String
+    ): String {
         val privateKey: PrivateKey = getNativePrivateKey(mnemonic, passphrase)
 
-        return privateKey.sign(message, coinType!!.curve())
+        return privateKey.sign(message.toHexByteArray(), coinType!!.curve()).toHex()
     }
 
     override fun signTransaction(
         tx: Map<String, Any>,
         mnemonic: String,
         passphrase: String,
-    ): ByteArray {
-        val privateKey = getRawPrivateKey(mnemonic, passphrase)
+    ): String {
+        val privateKey = getHexPrivateKey(mnemonic, passphrase)
+
+        return signTransaction(tx,privateKey)
+    }
+
+    override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
         val opJson = JSONObject(tx).toString()
-        return AnySigner.signJSON(opJson, privateKey, coinType!!.value()).toByteArray()
+        return AnySigner.signJSON(opJson, privateKey.toHexByteArray(), coinType!!.value())
     }
 
 //    override fun multiSignTransaction(

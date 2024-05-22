@@ -1,23 +1,19 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
-import com.trustwalletcorereactnative.util.toHexByteArray
+import com.trustwalletcorereactnative.wallet_core.util.toHex
+import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
 import wallet.core.java.AnySigner
 import wallet.core.jni.CoinType
 import wallet.core.jni.proto.Ethereum
 import wallet.core.jni.proto.Ethereum.Transaction
 
 open class Ethereum : Coin(CoinType.ETHEREUM,"m/44'/60'/0'/0/0"){
-    override fun signTransaction(
-        tx: Map<String,Any>,
-        mnemonic: String,
-        passphrase: String,
-    ): ByteArray {
-
+    override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
         val transaction: Map<String,Any>? = tx["transaction"] as? Map<String,Any>
 
         val signingInputBuilder = Ethereum.SigningInput.newBuilder().apply {
-            privateKey = ByteString.copyFrom(getRawPrivateKey(mnemonic,passphrase))
+            this.privateKey = ByteString.copyFrom(privateKey.toHexByteArray())
             chainId = ByteString.copyFrom((tx["chainId"] as String).toHexByteArray())
             nonce = ByteString.copyFrom((tx["nonce"] as String).toHexByteArray())
             gasPrice = ByteString.copyFrom((tx["gasPrice"] as String).toHexByteArray())
@@ -78,6 +74,6 @@ open class Ethereum : Coin(CoinType.ETHEREUM,"m/44'/60'/0'/0/0"){
 
         val signed = AnySigner.sign(signingInputBuilder.build(),coinType,Ethereum.SigningOutput.parser())
 
-        return signed.encoded.toByteArray()
+        return signed.encoded.toByteArray().toHex()
     }
 }

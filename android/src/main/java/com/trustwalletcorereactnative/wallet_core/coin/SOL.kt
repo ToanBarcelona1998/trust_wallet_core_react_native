@@ -1,21 +1,18 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
-import com.trustwalletcorereactnative.util.toHex
-import com.trustwalletcorereactnative.util.toHexByteArray
-import com.trustwalletcorereactnative.util.toLong
+import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
+import com.trustwalletcorereactnative.wallet_core.util.toLong
 import wallet.core.java.AnySigner
 import wallet.core.jni.CoinType
 import wallet.core.jni.proto.Solana
 
 class SOL : Coin(CoinType.SOLANA , "m/44'/501'/0'/0/0") {
-
-    override fun signTransaction(tx: Map<String, Any>, mnemonic: String, passphrase: String,): ByteArray {
-
+    override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
         val transaction : Map<String,Any>? = tx["transaction"] as? Map<String,Any>
 
         val signingInputBuilder = Solana.SigningInput.newBuilder().apply {
-            privateKey = ByteString.copyFrom(getRawPrivateKey(mnemonic,passphrase))
+            this.privateKey = ByteString.copyFrom(privateKey.toHexByteArray())
             sender = tx["sender"] as String
             nonceAccount = tx["nonce"] as String
             recentBlockhash = tx["recentBlockHash"] as String
@@ -61,12 +58,7 @@ class SOL : Coin(CoinType.SOLANA , "m/44'/501'/0'/0/0") {
 
         val singed : Solana.SigningOutput = Solana.SigningOutput.parseFrom(signingInput.toByteArray())
 
-        return singed.encoded.toByteArray()
-    }
-
-
-    override fun getHexPublicKey(mnemonic: String, passphrase: String): String {
-        return getRawPublicKey(mnemonic,passphrase).toHex()
+        return singed.encoded
     }
 
     override fun getRawPublicKey( mnemonic: String, passphrase: String): ByteArray {
