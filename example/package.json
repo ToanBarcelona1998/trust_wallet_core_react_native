@@ -10,8 +10,10 @@
     "build:ios": "cd ios && xcodebuild -workspace TrustWalletCoreReactNativeExample.xcworkspace -scheme TrustWalletCoreReactNativeExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
+    "ethers": "^6.12.1",
     "react": "18.2.0",
-    "react-native": "0.74.1"
+    "react-native": "0.74.1",
+    "trust_wallet_core_react_native": "link:../"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
