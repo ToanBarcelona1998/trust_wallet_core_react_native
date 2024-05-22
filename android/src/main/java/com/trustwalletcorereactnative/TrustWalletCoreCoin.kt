@@ -123,33 +123,30 @@ class TrustWalletCoreCoin(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun sign(mnemonic: String, passPhrase: String, coinType: Int, message: ByteArray, promise: Promise){
+    fun sign(mnemonic: String, passPhrase: String, coinType: Int, message: String, promise: Promise){
         val coin = Coin.createCoinByteType(coinType)
 
-        val array = Arguments.createArray()
+        val sig = coin.sign(mnemonic,passPhrase,message)
 
-        val rawSig = coin.sign(mnemonic,passPhrase,message)
-
-        for (s in rawSig){
-            array.pushInt(s.toInt())
-        }
-
-        promise.resolve(array)
+        promise.resolve(sig)
     }
 
     @ReactMethod
     fun signTransaction(mnemonic: String, passPhrase: String, coinType: Int, tx: ReadableMap, promise: Promise){
         val coin = Coin.createCoinByteType(coinType)
 
-        val array = Arguments.createArray()
-
         val signed = coin.signTransaction(convertReadableMapToMap(tx),mnemonic,passPhrase)
 
-        for (s in signed){
-            array.pushInt(s.toInt())
-        }
+        promise.resolve(signed)
+    }
 
-        promise.resolve(array)
+    @ReactMethod
+    fun signTransactionWithPrivateKey(privateKey : String,coinType: Int, tx: ReadableMap, promise: Promise){
+        val coin = Coin.createCoinByteType(coinType)
+
+        val signed = coin.signTransaction(convertReadableMapToMap(tx),privateKey)
+
+        promise.resolve(signed)
     }
 
 //    @ReactMethod
