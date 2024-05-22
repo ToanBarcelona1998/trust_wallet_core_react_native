@@ -11,9 +11,9 @@ class TrustWalletCoreCoin: NSObject {
     }
 
     @objc
-    func getAddress(_ mnemonic: String, passPharse : String, coinType : Int , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func getAddress(_ mnemonic: String, passPharse : String, coinType : NSNumber , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let address = try coin.getAddress(mnemonic: mnemonic, passPharse: passPharse)
             
@@ -26,9 +26,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func getSeed(_ mnemonic: String, passPharse : String, coinType : Int , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func getSeed(_ mnemonic: String, passPharse : String, coinType : NSNumber , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let seed = try coin.getSeed(mnemonic: mnemonic, passPharse: passPharse)
             
@@ -43,9 +43,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func getHexPrivateKey(_ mnemonic: String, passPharse : String, coinType : Int , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func getHexPrivateKey(_ mnemonic: String, passPharse : String, coinType : NSNumber , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let privateKey = try coin.getHexPrivateKey(mnemonic: mnemonic, passPharse: passPharse)
             
@@ -58,9 +58,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func getRawPrivateKey(_ mnemonic: String, passPharse : String, coinType : Int , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func getRawPrivateKey(_ mnemonic: String, passPharse : String, coinType : NSNumber , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let privateKey = try coin.getRawPrivateKey(mnemonic: mnemonic, passPharse: passPharse)
             
@@ -75,9 +75,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func getHexPublicKey(_ mnemonic: String, passPharse : String, coinType : Int , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func getHexPublicKey(_ mnemonic: String, passPharse : String, coinType : NSNumber , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let publicKey = try coin.getHexPulicKey(mnemonic: mnemonic, passPharse: passPharse)
             
@@ -90,9 +90,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func getRawPublicKey(_ mnemonic: String, passPharse : String, coinType : Int , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func getRawPublicKey(_ mnemonic: String, passPharse : String, coinType : NSNumber , resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let publicKey = try coin.getRawPublicKey(mnemonic: mnemonic, passPharse: passPharse)
             
@@ -108,9 +108,9 @@ class TrustWalletCoreCoin: NSObject {
     
     
     @objc
-    func sign(_ mnemonic: String, passPharse : String, coinType : Int ,message : String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func sign(_ mnemonic: String, passPharse : String, coinType : NSNumber ,message : String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let sig = try coin.sign(mnemonic: mnemonic, passPharse: passPharse, message: message)
             
@@ -123,9 +123,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func signTransaction(_ mnemonic: String, passPharse : String, coinType : Int , tx: Dictionary<String, Any> ,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock){
+    func signTransaction(_ mnemonic: String, passPharse : String, coinType : NSNumber , tx: Dictionary<String, Any> ,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock){
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let tx = try coin.signTransaction(mnemonic: mnemonic, passPharse: passPharse, tx: tx)
             
@@ -138,9 +138,9 @@ class TrustWalletCoreCoin: NSObject {
     }
     
     @objc
-    func signTransactionWithPrivateKey(_ privateKey : String,coinType : Int , tx: Dictionary<String, Any> ,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock){
+    func signTransactionWithPrivateKey(_ privateKey : String,coinType : NSNumber , tx: Dictionary<String, Any> ,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock){
         do {
-            let coin = try Coin.createCoinByType(coinType: coinType)
+            let coin = try Coin.createCoinByType(coinType: coinType.intValue)
             
             let tx = try coin.signTransaction(privateKey: privateKey, tx: tx)
             
