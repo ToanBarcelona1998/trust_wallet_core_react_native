@@ -1,4 +1,4 @@
-package com.trustwalletcorereactnative.util
+package com.trustwalletcorereactnative.wallet_core.util
 import kotlin.experimental.and
 
 object Numeric {

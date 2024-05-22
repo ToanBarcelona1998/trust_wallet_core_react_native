@@ -1,4 +1,4 @@
-package com.trustwalletcorereactnative.util
+package com.trustwalletcorereactnative.wallet_core.util
 import android.util.Base64
 import com.google.protobuf.ByteString
 
