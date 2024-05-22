@@ -13,7 +13,7 @@ enum CError : Error {
     case UnSupportedCoin
     case InvalidMnemonic
     case Unknown
-    case UnsuportedTransaction
+    case UnsupportedTransaction
 }
 
 extension CError {
@@ -35,7 +35,7 @@ extension CError {
         case .Unknown:
             error = "Unknown error"
             break
-        case .UnsuportedTransaction:
+        case .UnsupportedTransaction:
             error = "UnSupported Transaction"
             break
         }
@@ -62,8 +62,8 @@ extension CError {
         case .Unknown:
             code = "Unknown"
             break
-        case .UnsuportedTransaction:
-            code = "UnsuportedTransaction"
+        case .UnsupportedTransaction:
+            code = "UnsupportedTransaction"
             break
         }
         

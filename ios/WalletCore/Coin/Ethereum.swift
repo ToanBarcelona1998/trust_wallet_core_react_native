@@ -114,7 +114,7 @@ class Ethereum : Coin{
             input.toAddress = transaction["contractAddress"] as! String
             break
             default:
-                throw CError.UnsuportedTransaction
+                throw CError.UnsupportedTransaction
                 break
         }
         
