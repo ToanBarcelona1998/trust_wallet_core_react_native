@@ -25,12 +25,18 @@ export function getAddress(
   );
 }
 
-export function getSeed(
+export async function getSeed(
   coinType: CoinType,
   mnemonic: String,
   passPharse: String
-): Promise<String> {
-  return TrustWalletCoreCoin.getSeed(mnemonic, passPharse, coinType.valueOf());
+): Promise<Uint8Array> {
+  let seed = await TrustWalletCoreCoin.getSeed(
+    mnemonic,
+    passPharse,
+    coinType.valueOf()
+  );
+
+  return new Uint8Array(seed);
 }
 
 export function getHexPrivateKey(
@@ -85,20 +91,18 @@ export async function getRawPublicKey(
   return new Uint8Array(publicKey);
 }
 
-export async function sign(
+export function sign(
   coinType: CoinType,
   mnemonic: String,
   passPharse: String,
-  messageHash: Uint8Array
-): Promise<Uint8Array> {
-  let rawSig = await TrustWalletCoreCoin.sign(
+  message: String
+): Promise<String> {
+  return TrustWalletCoreCoin.sign(
     mnemonic,
     passPharse,
     coinType.valueOf(),
-    messageHash
+    message
   );
-
-  return new Uint8Array(rawSig);
 }
 
 export async function signTransaction<T>(
@@ -106,30 +110,23 @@ export async function signTransaction<T>(
   mnemonic: String,
   passPharse: String,
   txMap: IParameter.Parameter<T>
-): Promise<Uint8Array> {
-  let tx = await TrustWalletCoreCoin.signTransaction(
+): Promise<String> {
+  return TrustWalletCoreCoin.signTransaction(
     mnemonic,
     passPharse,
     coinType.valueOf(),
     txMap.toNativeMap()
   );
-
-  return new Uint8Array(tx);
 }
 
-export async function multiSignTransaction<T>(
+export async function signTransactionWithPrivateKey<T>(
   coinType: CoinType,
-  txMap: IParameter.Parameter<T>,
-  privateKeys: Array<Uint8Array>
-): Promise<Array<Uint8Array>> {
-  let txs: Array<Array<number>> =
-    await TrustWalletCoreCoin.multiSignTransaction(
-      coinType.valueOf(),
-      txMap.toNativeMap(),
-      privateKeys
-    );
-
-  return txs.map((tx) => new Uint8Array(tx));
+  privateKey: String,
+  txMap: IParameter.Parameter<T>
+): Promise<String> {
+  return TrustWalletCoreCoin.signTransactionWithPrivateKey(
+    privateKey,
+    coinType.valueOf(),
+    txMap.toNativeMap()
+  );
 }
-
-export { CoinType, IParameter };
