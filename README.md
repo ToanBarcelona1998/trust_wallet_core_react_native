@@ -14,7 +14,7 @@ Config your git hub token in android -> grade
 ## Usage
 
 ```js
-import { createMnemonic } from 'trust_wallet_core_react_native';
+import { createMnemonic , validateMnemonic, Coin, CoinType, CoinParameter,} from 'trust_wallet_core_react_native';
 
 // ...
 
@@ -28,8 +28,8 @@ let ethereumTransaction =
 
 let ethereumParameter =
         new CoinParameter.Ethereum.EthereumTransactionParameter(
-          bigintToHexString(1),
-          bigintToHexString(BigInt(1)),
+          '0x79',
+          '0x123',
           '0x07FF684650',
           '0x5208',
           ethereumTransaction
@@ -37,7 +37,7 @@ let ethereumParameter =
 
 let tx = await Coin.signTransaction(
         CoinType.Ethereum,
-        result,
+        mnemonic,
         '',
         ethereumParameter
       );
