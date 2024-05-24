@@ -13,6 +13,24 @@ Config your git hub token in android -> grade
 
 ## Usage
 
+The first step
+1. With android
+*** 
+- Move to android folder -> MainApplication.kt
+- Add this line into MainApplication
+
+```kotlin
+  init {
+          System.loadLibrary("TrustWalletCore")
+      }
+```
+***
+2. With IOS
+***
+- Cd IOS folder
+- Run pod install to
+***
+
 ```js
 import { createMnemonic , validateMnemonic, Coin, CoinType, CoinParameter,} from 'trust_wallet_core_react_native';
 
