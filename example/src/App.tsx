@@ -24,12 +24,6 @@ function bigintToHexString(value: bigint): string {
   return '0x' + hexString;
 }
 
-// function toHexString(byteArray: Uint8Array) {
-//   return Array.from(byteArray, function (byte) {
-//     return ('0' + (byte & 0xff).toString(16)).slice(-2);
-//   }).join('');
-// }
-
 export default function App() {
   const [result, setResult] = React.useState<String>('');
 
@@ -46,30 +40,15 @@ export default function App() {
 
   async function signTransaction() {
     try {
-      console.log('run 0');
-
       var provider = new ethers.JsonRpcProvider(
         'https://ethereum-sepolia-rpc.publicnode.com'
       );
 
-      console.log('run1');
-
-      let address = await Coin.getAddress(
-        CoinType.Ethereum,
-        'inch device rain tired suffer voyage release stick ostrich vacant surface equal',
-        ''
-      );
-
-      console.log(`run 2 ${address}`);
+      let address = await Coin.getAddress(CoinType.Ethereum, result, '');
 
       let nonce = await provider.getTransactionCount(`${address}`);
 
-      console.log(`run 3`);
-
       let chainId = (await provider.getNetwork()).chainId;
-
-      console.log(`run 4`);
-      //insufficient funds for intrinsic transaction cost (transaction="0xf86f0b850d693a400082520894ec552cfb5ad7d7f8fb6aa5d832487fcf1c2f04eb870348bca5a16000808401546d72a00a1eb11a7fd7a50917a6077f895bd7a20cd0e67b98f1af33b895ce6917baf7e4a071826f0fb29e5bfd1b281d7d0ca67fa14766e685d8bdcdde248642a209e017f7", info={ "error": { "code": -32000, "message": "insufficient funds for gas * price + value: balance 0, tx cost 2134000000000000, overshot 2134000000000000" } }, code=INSUFFICIENT_FUNDS, version=6.12.1)
 
       let ethereumTransaction =
         new CoinParameter.Ethereum.TransferEthereumTransaction(
@@ -81,7 +60,7 @@ export default function App() {
         new CoinParameter.Ethereum.EthereumTransactionParameter(
           bigintToHexString(chainId),
           bigintToHexString(BigInt(nonce)),
-          '0xd693a4000',
+          '0x07FF684650',
           '0x5208',
           ethereumTransaction
         );
@@ -93,13 +72,9 @@ export default function App() {
         ethereumParameter
       );
 
-      console.log(`run 5 ${tx}`);
-
       let txRecipient = await provider.broadcastTransaction(`0x${tx}`);
 
-      console.log(`hash = ${txRecipient.blockHash}`);
-
-      console.log(bigintToHexString(chainId));
+      console.log(`receive tx hash ${txRecipient.hash}`);
     } catch (error) {
       console.log(`receive error ${error}`);
     }
