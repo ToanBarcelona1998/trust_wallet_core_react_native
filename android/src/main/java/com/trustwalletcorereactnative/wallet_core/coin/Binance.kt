@@ -1,6 +1,8 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
+import com.trustwalletcorereactnative.wallet_core.error.CEError
+import com.trustwalletcorereactnative.wallet_core.error.CError
 import com.trustwalletcorereactnative.wallet_core.util.toHex
 import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
 import com.trustwalletcorereactnative.wallet_core.util.toLong
@@ -13,7 +15,9 @@ import wallet.core.jni.proto.Binance
 class Binance : Coin(CoinType.BINANCE, "m/44'/714'/0'/0/0") {
 
     override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
-        val transaction: Map<String,Any> = tx["transaction"] as Map<String,Any>
+        val transaction: Map<String,Any> = tx["transaction"] as? Map<String,Any> ?: throw CError(
+            CEError.MissingArgumentError.message,
+            CEError.MissingArgumentError.code,)
 
         val publicKey = PrivateKey(privateKey.toHexByteArray()).getPublicKeySecp256k1(true)
         val signingInput = Binance.SigningInput.newBuilder().apply {

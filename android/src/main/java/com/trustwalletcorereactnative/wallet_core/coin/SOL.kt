@@ -1,6 +1,8 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
+import com.trustwalletcorereactnative.wallet_core.error.CEError
+import com.trustwalletcorereactnative.wallet_core.error.CError
 import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
 import com.trustwalletcorereactnative.wallet_core.util.toLong
 import wallet.core.java.AnySigner
@@ -9,7 +11,9 @@ import wallet.core.jni.proto.Solana
 
 class SOL : Coin(CoinType.SOLANA , "m/44'/501'/0'/0/0") {
     override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
-        val transaction : Map<String,Any>? = tx["transaction"] as? Map<String,Any>
+        val transaction : Map<String,Any> = tx["transaction"] as? Map<String,Any> ?: throw CError(
+            CEError.MissingArgumentError.message,
+            CEError.MissingArgumentError.code,)
 
         val signingInputBuilder = Solana.SigningInput.newBuilder().apply {
             this.privateKey = ByteString.copyFrom(privateKey.toHexByteArray())

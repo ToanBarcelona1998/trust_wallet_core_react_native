@@ -28,7 +28,7 @@ object Numeric {
         val startIdx: Int
         if (len % 2 != 0) {
             data = ByteArray(len / 2 + 1)
-            data[0] = Character.digit(cleanInput.get(0), 16).toByte()
+            data[0] = Character.digit(cleanInput[0], 16).toByte()
             startIdx = 1
         } else {
             data = ByteArray(len / 2)

@@ -1,6 +1,8 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
+import com.trustwalletcorereactnative.wallet_core.error.CEError
+import com.trustwalletcorereactnative.wallet_core.error.CError
 import com.trustwalletcorereactnative.wallet_core.util.toHex
 import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
 import wallet.core.java.AnySigner
@@ -10,7 +12,8 @@ import wallet.core.jni.proto.Ethereum.Transaction
 
 open class Ethereum : Coin(CoinType.ETHEREUM,"m/44'/60'/0'/0/0"){
     override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
-        val transaction: Map<String,Any>? = tx["transaction"] as? Map<String,Any>
+        val transaction: Map<String, Any> = tx["transaction"] as? Map<String,Any>
+            ?: throw CError(CEError.MissingArgumentError.message,CEError.MissingArgumentError.code,)
 
         val signingInputBuilder = Ethereum.SigningInput.newBuilder().apply {
             this.privateKey = ByteString.copyFrom(privateKey.toHexByteArray())
@@ -21,7 +24,7 @@ open class Ethereum : Coin(CoinType.ETHEREUM,"m/44'/60'/0'/0/0"){
         }
 
 
-        when(transaction?.get("type")){
+        when(transaction["type"]){
             "Transfer" -> {
                 val tx = Transaction.newBuilder().apply {
                     transfer = Transaction.Transfer.newBuilder().apply {
@@ -67,7 +70,7 @@ open class Ethereum : Coin(CoinType.ETHEREUM,"m/44'/60'/0'/0/0"){
                 signingInputBuilder.toAddress = transaction["contractAddress"] as String
             }
             else -> {
-                throw Exception("Un support transaction type")
+                throw CError(CEError.UnsupportedTransaction.message,CEError.UnsupportedTransaction.code)
             }
 
         }

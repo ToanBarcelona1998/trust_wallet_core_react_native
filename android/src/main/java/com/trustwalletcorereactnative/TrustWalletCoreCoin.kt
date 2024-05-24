@@ -10,9 +10,19 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.trustwalletcorereactnative.wallet_core.coin.Coin
+import com.trustwalletcorereactnative.wallet_core.error.CEError
+import com.trustwalletcorereactnative.wallet_core.error.CError
 
 class TrustWalletCoreCoin(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
+
+    private fun resolveError(e : Exception,promise: Promise){
+        if(e is CError){
+            promise.reject(e.getCode(),e.message , null)
+        }else{
+            promise.reject(CEError.Unknown.code,e.message , null)
+        }
+    }
 
     private fun convertReadableMapToMap(readableMap: ReadableMap): Map<String, Any> {
         val map: MutableMap<String, Any> = HashMap()
@@ -58,95 +68,131 @@ class TrustWalletCoreCoin(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun getAddress(mnemonic: String, passPhrase: String, coinType: Int, promise: Promise) {
-        val coin = Coin.createCoinByteType(coinType)
+        try{
+            val coin = Coin.createCoinByteType(coinType)
 
-        val address = coin.getAddress(mnemonic, passPhrase)
+            val address = coin.getAddress(mnemonic, passPhrase)
 
-        promise.resolve(address)
+            promise.resolve(address)
+        }catch (e : Exception){
+            resolveError(e,promise)
+        }
     }
 
     @ReactMethod
     fun getSeed(mnemonic: String, passPhrase: String, coinType: Int, promise: Promise) {
-        val coin = Coin.createCoinByteType(coinType)
+        try{
+            val coin = Coin.createCoinByteType(coinType)
 
-        val seed = coin.getSeed(mnemonic, passPhrase)
+            val seed = coin.getSeed(mnemonic, passPhrase)
 
-        promise.resolve(seed)
+            promise.resolve(seed)
+        }catch (e : Exception){
+            resolveError(e,promise)
+        }
     }
 
     @ReactMethod
     fun getHexPrivateKey(mnemonic: String, passPhrase: String, coinType: Int, promise: Promise) {
-        val coin = Coin.createCoinByteType(coinType)
+        try{
+            val coin = Coin.createCoinByteType(coinType)
 
-        val privateKey = coin.getHexPrivateKey(mnemonic, passPhrase)
+            val privateKey = coin.getHexPrivateKey(mnemonic, passPhrase)
 
-        promise.resolve(privateKey)
+            promise.resolve(privateKey)
+        }catch (e : Exception){
+            resolveError(e,promise)
+        }
     }
 
     @ReactMethod
     fun getRawPrivateKey(mnemonic: String, passPhrase: String, coinType: Int, promise: Promise) {
-        val coin = Coin.createCoinByteType(coinType)
+        try{
+            val coin = Coin.createCoinByteType(coinType)
 
-        val privateKey = coin.getRawPrivateKey(mnemonic, passPhrase)
+            val privateKey = coin.getRawPrivateKey(mnemonic, passPhrase)
 
-        val array = Arguments.createArray()
+            val array = Arguments.createArray()
 
-        for (b in privateKey){
-            array.pushInt(b.toInt())
+            for (b in privateKey){
+                array.pushInt(b.toInt())
+            }
+
+            promise.resolve(array)
+        }catch (e : Exception){
+            resolveError(e, promise)
         }
-
-        promise.resolve(array)
     }
 
     @ReactMethod
     fun getHexPublicKey(mnemonic: String, passPhrase: String, coinType: Int, promise: Promise) {
-        val coin = Coin.createCoinByteType(coinType)
+        try{
+            val coin = Coin.createCoinByteType(coinType)
 
-        val publicKey = coin.getHexPublicKey(mnemonic, passPhrase)
+            val publicKey = coin.getHexPublicKey(mnemonic, passPhrase)
 
-        promise.resolve(publicKey)
+            promise.resolve(publicKey)
+        }catch (e : Exception){
+            resolveError(e,promise)
+        }
     }
 
     @ReactMethod
     fun getRawPublicKey(mnemonic: String, passPhrase: String, coinType: Int, promise: Promise) {
-        val coin = Coin.createCoinByteType(coinType)
+        try {
+            val coin = Coin.createCoinByteType(coinType)
 
-        val array = Arguments.createArray()
+            val array = Arguments.createArray()
 
-        val publicKey = coin.getRawPublicKey(mnemonic, passPhrase)
+            val publicKey = coin.getRawPublicKey(mnemonic, passPhrase)
 
-        for (p in publicKey){
-            array.pushInt(p.toInt())
+            for (p in publicKey){
+                array.pushInt(p.toInt())
+            }
+
+            promise.resolve(array)
+        }catch (e: Exception){
+            resolveError(e,promise)
         }
-
-        promise.resolve(array)
     }
 
     @ReactMethod
     fun sign(mnemonic: String, passPhrase: String, coinType: Int, message: String, promise: Promise){
-        val coin = Coin.createCoinByteType(coinType)
+        try {
+            val coin = Coin.createCoinByteType(coinType)
 
-        val sig = coin.sign(mnemonic,passPhrase,message)
+            val sig = coin.sign(mnemonic,passPhrase,message)
 
-        promise.resolve(sig)
+            promise.resolve(sig)
+        }catch (e: Exception){
+            resolveError(e,promise)
+        }
     }
 
     @ReactMethod
     fun signTransaction(mnemonic: String, passPhrase: String, coinType: Int, tx: ReadableMap, promise: Promise){
-        val coin = Coin.createCoinByteType(coinType)
+        try{
+            val coin = Coin.createCoinByteType(coinType)
 
-        val signed = coin.signTransaction(convertReadableMapToMap(tx),mnemonic,passPhrase)
+            val signed = coin.signTransaction(convertReadableMapToMap(tx),mnemonic,passPhrase)
 
-        promise.resolve(signed)
+            promise.resolve(signed)
+        }catch (e : Exception){
+            resolveError(e,promise)
+        }
     }
 
     @ReactMethod
     fun signTransactionWithPrivateKey(privateKey : String,coinType: Int, tx: ReadableMap, promise: Promise){
-        val coin = Coin.createCoinByteType(coinType)
+        try {
+            val coin = Coin.createCoinByteType(coinType)
 
-        val signed = coin.signTransaction(convertReadableMapToMap(tx),privateKey)
+            val signed = coin.signTransaction(convertReadableMapToMap(tx),privateKey)
 
-        promise.resolve(signed)
+            promise.resolve(signed)
+        }catch (e : Exception){
+            resolveError(e,promise)
+        }
     }
 
 //    @ReactMethod

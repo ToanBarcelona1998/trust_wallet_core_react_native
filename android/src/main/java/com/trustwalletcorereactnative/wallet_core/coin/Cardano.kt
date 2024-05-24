@@ -1,6 +1,8 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
 import com.google.protobuf.ByteString
+import com.trustwalletcorereactnative.wallet_core.error.CEError
+import com.trustwalletcorereactnative.wallet_core.error.CError
 import com.trustwalletcorereactnative.wallet_core.util.Numeric
 import com.trustwalletcorereactnative.wallet_core.util.toHex
 import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
@@ -13,7 +15,9 @@ class Cardano : Coin(CoinType.CARDANO, "m/1852'/1815'/0'/0/0") {
 
     override fun signTransaction(tx: Map<String, Any>, privateKey: String): String {
         val listOfAllUtxos = mutableListOf<Cardano.TxInput>();
-        val utxos: List<Map<String, Any>> = tx["utxos"] as List<Map<String, Any>>
+        val utxos: List<Map<String, Any>> = tx["utxos"] as? List<Map<String, Any>> ?: throw CError(
+            CEError.MissingArgumentError.message,
+            CEError.MissingArgumentError.code,)
 
 
         for (utx in utxos) {

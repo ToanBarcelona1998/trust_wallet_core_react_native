@@ -1,5 +1,7 @@
 package com.trustwalletcorereactnative.wallet_core.coin
 
+import com.trustwalletcorereactnative.wallet_core.error.CEError
+import com.trustwalletcorereactnative.wallet_core.error.CError
 import com.trustwalletcorereactnative.wallet_core.interfaces.ICoin
 import com.trustwalletcorereactnative.wallet_core.util.toHex
 import com.trustwalletcorereactnative.wallet_core.util.toHexByteArray
@@ -36,7 +38,7 @@ abstract class Coin(coinType: CoinType, derivationPath: String) : ICoin {
                     SOL()
                 }
                 else -> {
-                    throw Exception("Un support coin type")
+                    throw CError(CEError.UnSupportedCoin.message,CEError.UnSupportedCoin.code)
                 }
             }
         }
@@ -78,9 +80,13 @@ abstract class Coin(coinType: CoinType, derivationPath: String) : ICoin {
     }
 
     fun getNativePrivateKey(mnemonic: String, passphrase: String): PrivateKey {
-        val hdWallet: HDWallet = HDWallet(mnemonic, passphrase)
+        try {
+            val hdWallet: HDWallet = HDWallet(mnemonic, passphrase)
 
-        return hdWallet.getKey(coinType, derivationPath)
+            return hdWallet.getKey(coinType, derivationPath)
+        }catch (e : Exception){
+            throw CError(CEError.InvalidMnemonic.code,CEError.InvalidMnemonic.message)
+        }
     }
 
     override fun sign(

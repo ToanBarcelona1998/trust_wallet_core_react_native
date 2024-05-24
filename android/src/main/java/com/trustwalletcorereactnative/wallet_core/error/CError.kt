@@ -2,7 +2,6 @@ package com.trustwalletcorereactnative.wallet_core.error
 
 enum class CEError(val message : String,val code :String){
     MissingArgumentError("Missing argument error", "MissingArgumentError"),
-    InvalidHexArgumentError("Invalid hex argument error","InvalidHexArgumentError"),
     UnSupportedCoin("Unsupported coin","UnSupportedCoin"),
     InvalidMnemonic("Invalid mnemonic","InvalidMnemonic"),
     Unknown("Unknown error","Unknown"),
