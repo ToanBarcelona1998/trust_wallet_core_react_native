@@ -13,7 +13,7 @@ abstract class SOLTransaction {
     this.type = type;
   }
 
-  abstract toNativeMap(): Map<String, any>;
+  abstract toNativeMap(): Object;
 }
 
 class TransferSOLTransaction extends SOLTransaction {
@@ -28,16 +28,13 @@ class TransferSOLTransaction extends SOLTransaction {
     this.value = value;
   }
 
-  toNativeMap(): Map<String, any> {
-    let map = new Map();
-
-    map.set('type', this.type.valueOf());
-
-    map.set('recipient', this.recipient);
-
-    map.set('memo', this.memo);
-
-    map.set('value', this.value);
+  toNativeMap(): Object {
+    let map = {
+      type: this.type.valueOf(),
+      recipient: this.recipient,
+      memo: this.memo,
+      value: this.value,
+    };
 
     return map;
   }
@@ -55,16 +52,13 @@ class DelegateStakeSOLTransaction extends SOLTransaction {
     this.stakeAccount = stakeAccount;
   }
 
-  toNativeMap(): Map<String, any> {
-    let map = new Map();
-
-    map.set('type', this.type.valueOf());
-
-    map.set('value', this.value);
-
-    map.set('pubkey', this.validatorPubkey);
-
-    map.set('account', this.stakeAccount);
+  toNativeMap(): Object {
+    let map = {
+      type: this.type.valueOf(),
+      value: this.value,
+      pubkey: this.validatorPubkey,
+      account: this.stakeAccount,
+    };
 
     return map;
   }
@@ -92,20 +86,15 @@ class TransferTolenSOLTransaction extends SOLTransaction {
     this.amount = amount;
   }
 
-  toNativeMap(): Map<String, any> {
-    let map = new Map();
-
-    map.set('type', this.type.valueOf());
-
-    map.set('tokenAddress', this.tokenAddress);
-
-    map.set('sender', this.sender);
-
-    map.set('recipient', this.recipientAddress);
-
-    map.set('memo', this.memo);
-
-    map.set('amount', this.amount);
+  toNativeMap(): Object {
+    let map = {
+      type: this.type.valueOf(),
+      tokenAddress: this.tokenAddress,
+      sender: this.sender,
+      recipient: this.recipientAddress,
+      memo: this.memo,
+      amount: this.amount,
+    };
 
     return map;
   }
@@ -134,20 +123,15 @@ class SOLTransactionParameter extends Parameter<SOLTransaction> {
     this.feePayer = feePayer;
   }
 
-  toNativeMap(): Map<String, any> {
-    let map = new Map();
-
-    map.set('transaction', this.getTransaction()?.toNativeMap());
-
-    map.set('sender', this.sender);
-
-    map.set('nonce', this.nonce);
-
-    map.set('recentBlockHash', this.recentBlockHash);
-
-    map.set('feePayerPrivateKey', this.feePayerPrivateKey);
-
-    map.set('feePayer', this.feePayer);
+  toNativeMap(): Object {
+    let map = {
+      transaction: this.getTransaction()?.toNativeMap(),
+      sender: this.sender,
+      nonce: this.nonce,
+      recentBlockHash: this.recentBlockHash,
+      feePayerPrivateKey: this.feePayerPrivateKey,
+      feePayer: this.feePayer,
+    };
 
     return map;
   }
