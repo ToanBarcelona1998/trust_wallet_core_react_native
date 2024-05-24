@@ -47,7 +47,13 @@ console.log(`receive tx ${tx}`)
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+***
+- For now there are no strict guidelines.
+- Just create your pull request.
+- Make sure to add a description what the pull request is about.
+- If you have any questions feel free to ask.
+- Looking forward contributions.
+*** 
 
 ## License
 
