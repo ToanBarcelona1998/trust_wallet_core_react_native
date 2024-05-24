@@ -42,7 +42,7 @@ class Binance : Coin{
         }
         
         let orderOutput = BinanceSendOrder.Output.with {
-            $0.address = AnyAddress(string: transaction["to"] as! String, coin: .binance)!.data
+            $0.address = AnyAddress(string: transaction["to"] as! String, coin: coinType)!.data
             $0.coins = [token]
         }
         
