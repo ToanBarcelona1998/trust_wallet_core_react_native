@@ -14,6 +14,7 @@ class Ethereum : Coin{
     }
     
     override func signTransaction(privateKey: String, tx: Dictionary<String, Any>) throws -> String {
+        
         let transaction = tx["transaction"] as? Dictionary<String,Any>
         
         guard let transaction = transaction else {
@@ -40,12 +41,11 @@ class Ethereum : Coin{
             throw CError.InvalidHexArgumentError
         }
         
-        var input = EthereumSigningInput.with{
+        var input = EthereumSigningInput.with {
             $0.chainID = chainId
             $0.nonce = nonce
             $0.gasPrice = gasPrice
             $0.gasLimit = gasLimit
-            $0.toAddress = tx["toAddress"] as! String
             $0.privateKey = rawPrivateKey
         }
         
@@ -54,7 +54,7 @@ class Ethereum : Coin{
             case "Transfer":
             input.toAddress = transaction["to"] as! String
             
-            guard let amount = Data(hexString: tx["amount"] as! String) else {
+            guard let amount = Data(hexString: transaction["amount"] as! String) else {
                 throw CError.InvalidHexArgumentError
             }
             
@@ -67,7 +67,7 @@ class Ethereum : Coin{
                 break
         case "ERC20_Transfer":
             
-            guard let amount = Data(hexString: tx["amount"] as! String) else {
+            guard let amount = Data(hexString: transaction["amount"] as! String) else {
                 throw CError.InvalidHexArgumentError
             }
             
@@ -83,7 +83,7 @@ class Ethereum : Coin{
             break
         case "ERC721_Transfer":
             
-            guard let tokenId = Data(hexString: tx["tokenId"] as! String) else {
+            guard let tokenId = Data(hexString: transaction["tokenId"] as! String) else {
                 throw CError.InvalidHexArgumentError
             }
             
@@ -99,7 +99,7 @@ class Ethereum : Coin{
             break
         case "ERC20_Approve":
             
-            guard let amount = Data(hexString: tx["amount"] as! String) else {
+            guard let amount = Data(hexString: transaction["amount"] as! String) else {
                 throw CError.InvalidHexArgumentError
             }
             
@@ -115,7 +115,6 @@ class Ethereum : Coin{
             break
             default:
                 throw CError.UnsupportedTransaction
-                break
         }
         
         let signed : EthereumSigningOutput = AnySigner.sign(input: input, coin: coinType)
