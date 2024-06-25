@@ -46,7 +46,7 @@ class Binance : Coin{
             $0.coins = [token]
         }
         
-        var input = BinanceSigningInput.with{
+        let input = BinanceSigningInput.with{
             $0.chainID = tx["chainId"] as! String
             $0.memo = tx["memo"] as! String
             $0.accountNumber = tx["accountNumber"] as! Int64

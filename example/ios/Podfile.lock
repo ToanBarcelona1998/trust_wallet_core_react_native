@@ -1253,6 +1253,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - trust-wallet-core-react-native (from `../..`)
+  - TrustWalletCore
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1434,6 +1435,6 @@ SPEC CHECKSUMS:
   TrustWalletCore: 1c6c510917f6a93374b219eddef17cd82c29e419
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
 
-PODFILE CHECKSUM: 38d1fd6863814ff6ca0be8f0cf6f57be886892a5
+PODFILE CHECKSUM: 988036c9be1d67c11fef7da884d5d878bbefd15d
 
 COCOAPODS: 1.15.2
