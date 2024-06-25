@@ -2,9 +2,8 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text, Button } from 'react-native';
 import {
-  createMnemonic,
-  validateMnemonic,
-  Coin,
+  Mnemonic,
+  TrustWalletCore,
   CoinType,
   CoinParameter,
 } from 'trust_wallet_core_react_native';
@@ -28,11 +27,11 @@ export default function App() {
   const [result, setResult] = React.useState<String>('');
 
   React.useEffect(() => {
-    createMnemonic(128, '').then(setResult);
+    Mnemonic.createMnemonic(128, '').then(setResult);
   }, []);
 
   function validate() {
-    validateMnemonic(result, '').then((isValid) => {
+    Mnemonic.validateMnemonic(result, '').then((isValid) => {
       setResult(`${isValid}`);
       console.log(isValid);
     });
@@ -44,7 +43,11 @@ export default function App() {
         'https://ethereum-sepolia-rpc.publicnode.com'
       );
 
-      let address = await Coin.getAddress(CoinType.Ethereum, result, '');
+      let address = await TrustWalletCore.getAddress(
+        CoinType.Ethereum,
+        result,
+        ''
+      );
 
       let nonce = await provider.getTransactionCount(`${address}`);
 
@@ -65,7 +68,7 @@ export default function App() {
           ethereumTransaction
         );
 
-      let tx = await Coin.signTransaction(
+      let tx = await TrustWalletCore.signTransaction(
         CoinType.Ethereum,
         result,
         '',
