@@ -33,11 +33,11 @@ The first step
 ***
 
 ```js
-import { createMnemonic , validateMnemonic, Coin, CoinType, CoinParameter,} from 'trust_wallet_core_react_native';
+import { Mnemonic, TrustWalletCore, CoinType, CoinParameter,} from 'trust_wallet_core_react_native';
 
 // ...
 
-const mnemonic = await createMnemonic(128, "");
+const mnemonic = await Mnemonic.createMnemonic(128, "");
 
 let ethereumTransaction =
         new CoinParameter.Ethereum.TransferEthereumTransaction(
@@ -54,7 +54,7 @@ let ethereumParameter =
           ethereumTransaction
         );
 
-let tx = await Coin.signTransaction(
+let tx = await TrustWalletCore.signTransaction(
         CoinType.Ethereum,
         mnemonic,
         '',
