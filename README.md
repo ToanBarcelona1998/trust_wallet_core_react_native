@@ -39,12 +39,29 @@ import { Mnemonic, TrustWalletCore, CoinType, CoinParameter,} from 'trust_wallet
 
 const mnemonic = await Mnemonic.createMnemonic(128, "");
 
+
+// Get address
+let address = await TrustWalletCore.getAddress(
+        CoinType.Ethereum,
+        result,
+        ''
+      );
+
+// Get private key
+let privateKey = await TrustWalletCore.getHexPrivateKey(
+  CoinType.Ethereum,
+  result,
+  ''
+  )
+
+// Create ethereum transaction
 let ethereumTransaction =
         new CoinParameter.Ethereum.TransferEthereumTransaction(
           '0x0348bca5a16000',
           '0xeC552cFb5Ad7d7f8FB6aA5D832487Fcf1C2f04EB'
         );
 
+// Create ethereum raw tx
 let ethereumParameter =
         new CoinParameter.Ethereum.EthereumTransactionParameter(
           '0x79',
@@ -54,6 +71,7 @@ let ethereumParameter =
           ethereumTransaction
         );
 
+// Sign transaction
 let tx = await TrustWalletCore.signTransaction(
         CoinType.Ethereum,
         mnemonic,
