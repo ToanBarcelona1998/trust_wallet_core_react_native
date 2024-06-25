@@ -28,6 +28,7 @@ The first step
 2. With IOS
 ***
 - Cd IOS folder
+- Add this line `pod 'TrustWalletCore'` to Podfile
 - Run pod install to
 ***
 
